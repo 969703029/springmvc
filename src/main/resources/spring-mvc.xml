@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+        <!-- springmvc指定静态资源包，核心控制器不会把JS，CSS的请求发送到HandleMapping，而是直接去文件路径获取 -->
+        <mvc:resources location="/static/" mapping="/static/**"></mvc:resources>
+        
+        <!-- 开启组件的自动扫描 -->
+        <context:component-scan base-package="org.framestudy.springmvc20170818">
+        	<!-- 制定扫描规则：要求容器中只能管理WEB层的组件 -->
+        	<!-- context:include-filter 包含过滤器     context:exclude-filter 不包含过滤器 -->
+        	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+       		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        </context:component-scan>
+        <!-- @Controller -->
+        <!-- 使用注解版的springmvc框架，将不需要显式配置HandleMapping,
+        将会自动采用DefaultAnnotationHandleMapping来作为处理映射器 -->
+        <mvc:annotation-driven />
+        
+        
+        <!-- 需要配置1个视图解析器 -->
+        <bean id="urlBasedViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> 
+        	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        	<property name="prefix" value="/"></property>
+        	<property name="suffix" value=".jsp"></property>
+        </bean>
+</beans>
